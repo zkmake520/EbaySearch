@@ -1,0 +1,414 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>KanZhou_HW8</title>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="http://jqueryvalidation.org/files/dist/jquery.validate.min.js"></script>
+    <script src="http://jqueryvalidation.org/files/dist/additional-methods.min.js"></script>
+     <script type="text/javascript">
+        function clearForm(){
+            var ele = document.getElementsByTagName("input");
+            for(var i = 0; i < ele.length;i++){
+                if(ele.item(i).value =="Clear" || ele.item(i).value =="Search");
+                else ele.item(i).value="";
+            }
+            var ele2 = document.getElementsByTagName("option");
+            for(var j = 0; j < ele2.length;j++){
+                ele2.item(j).selected="";
+            }
+            var ele3 = document.getElementsByTagName("input");
+            for(var j = 0; j < ele3.length;j++){
+                ele3.item(j).checked="";
+            }
+            document.getElementById("output").innerHTML="";
+        } 
+     
+    </script>
+</head>
+<body>
+    <script >
+     window.fbAsyncInit = function() {
+        FB.init({
+          appId      : '1445738255717861',
+          xfbml      : true,
+          version    : 'v2.3'
+        });
+      };(function(d, s, id){
+         var js, fjs = d.getElementsByTagName(s)[0];
+         if (d.getElementById(id)) {return;}
+         js = d.createElement(s); js.id = id;
+         js.src = "//connect.facebook.net/en_US/sdk.js";
+         fjs.parentNode.insertBefore(js, fjs);
+       }(document, 'script', 'facebook-jssdk'));
+     </script>
+	<div class="container">
+    	<table style="margin:8px">
+    		<td ><img src="http://cs-server.usc.edu:45678/hw/hw8/ebay.jpg" width="100px" height = "40px"  ></img></td>
+            <td > <span style="font-size:23px;">Shopping</span></td>
+        </table>
+        <form class="form-horizontal" role="form" id="search">
+        	<div class="form-group">
+        		<label class="control-label col-sm-2">Key words:<span class="text-danger"> *</span></label>
+        		<div class="col-sm-10">
+        		<input type="text" class="form-control" name="keyword" id="keyword" placeHolder="Enter keyword">
+        		</div>
+        	</div>
+    		<div class="form-group">
+        		<label class="control-label col-sm-2">Price Range:</label>
+        		<div class="col-sm-5">
+        		<input type="number" class="form-control" name="from" id="from" placeHolder="from ($)">
+        		</div>
+        		<div class="col-sm-5">
+        		<input type="number" class="form-control" name="to" id= "to" placeHolder="to ($)">
+        		</div>
+        	</div>
+        	<div class="form-group">
+        		<label class="control-label col-sm-2">Condition:</label>
+        		<div class="col-sm-10">
+        			<div class="checkbox">
+        				<label><input type="checkbox" name="con[]" value="1000" >New </label>
+        				<label><input type="checkbox" name="con[]" value="3000" >Used </label>
+        				<label><input type="checkbox" name="con[]" value="4000" >Very Good</label>
+        				<label><input type="checkbox" name="con[]" value="5000" >Good</label>
+        				<label><input type="checkbox" name="con[]" value="6000" >Acceptable</label>
+        			</div>
+        		</div>
+        	</div>
+    		<div class="form-group">
+        		<label class="control-label col-sm-2">Buying formats:</label>
+        		<div class="col-sm-10">
+        			<div class="checkbox">
+        				<label><input type="checkbox" name="buy[]" value="FixedPrice" >Buy it Now</label>
+        				<label><input type="checkbox" name="buy[]" value="Auction" >Auction</label>
+        				<label><input type="checkbox" name="buy[]" value="Classified" >Classified Ads</label>
+        			</div>	
+        		</div>
+        	</div>
+        	<div class="form-group">
+        		<label class="control-label col-sm-2">Seller:</label>
+        		<div class="col-sm-10">
+        			<div class="checkbox checkbox">
+        				<label><input type="checkbox" name="sell" id = "sell" value="true" >Return accepted</label>
+        			</div>	
+        		</div>
+        	</div>
+        	<div class="form-group">
+        		<label class="control-label col-sm-2">Shipping:</label>
+        		<div class="col-sm-10">
+        			<div class="checkbox">
+        				<label><input type="checkbox" name="ship1" id="ship1" value="true" >Free Shipping</label>
+        				<label><input type="checkbox" name="ship2" id="ship2" value="Expedited" >Expeditied shipping</label>
+        			</div>
+        			<br/>
+
+        			<input type="number" class="form-control" name="handletime" id ="handletime" placeHolder="Max handling time(days)">
+        		</div>
+        	</div>
+        	<div class="form-group">
+        		<label class="control-label col-sm-2">Sort by:</label>
+        		<div class="col-sm-10">
+        		<select name="sort"class="form-control" id="sort">
+				 	<option value="BestMatch" >Best Match</option>
+                    <option value="CurrentPriceHighest" >Price:highset first</option>
+                    <option value="PricePlusShippingHighest">Price+Shipping:highest first</option>
+                    <option value="PricePlusShippingLowest">Price+Shipping:lowest first</option></select>
+				</select>
+				</div>
+        	</div>
+        	<div class="form-group">
+        		<label class="control-label col-sm-2">res Per Page:</label>
+        		<div class="col-sm-10">
+        		<select name="page" class="form-control" id="page">
+				 	<option value="5" >5</option>
+                    <option value="10" >10</option>
+				</select>
+				</div>
+        	</div>
+        	<div class="form-group">
+        		<div class="col-sm-offset-10">
+        		<input type="button" class="btn btn-default" name="clear" value="Clear" onclick="clearForm(this.search);">
+        		<input type="submit" class="btn btn-primary" name="submit" value="Search" id ="submit" >
+        		</div>
+        	</div>
+        	
+    	</form>
+    
+    <div id="show">
+        
+    </div>
+    <nav>
+          <ul class="pagination" id ="pag">
+           <!--  <li>
+              <a href="#" aria-label="Previous" id ="pre">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            <li  id ="page1"><a href="#"></a></li>
+            <li  id ="page2"><a href="#"></a></li>
+            <li  id ="page2"><a href="#" id ="page3"></a></li>
+            <li  id ="page2"> <a href="#" id ="page4"></a></li>
+            <li  id ="page"><a href="#" id ="page5"></a></li>
+            <li>
+              <a href="#" aria-label="Next" id ="next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li> -->
+          </ul>
+        </nav>
+    </div>
+    <script >
+        var curP = 1;
+        var totalP=999999;
+        jQuery.validator.addMethod("compare", function(value, element) {
+        return parseInt($("#to").val().trim()) >=parseInt($("#from").val().trim())||$("#to").val()==''||$("#from").val()=='';
+        },"");  
+      
+        $(document).ready(function(){
+        $("#search").validate({
+               rules:{
+                    keyword:{
+                        required:true
+                    },
+                    from:{
+                        number:true,
+                        min:0
+                    },
+                    to:{
+                        number:true,
+                        min:0,
+                        compare:true
+                    },
+                    handletime:{
+                        digits:true,
+                        min:1
+                    }
+               },
+               highlight: function(element) {
+                    $(element).closest("input").addClass('has-error');
+                },
+                unhighlight: function(element) {
+                    $(element).closest(".form-group").removeClass("has-error");
+               },
+               messages:{
+                    keyword:{
+                        required:"<span class='text-danger'>Keyword is required </span>"
+                    },
+                    from:{
+                        number:"<span class='text-danger'>Price should be a valid decimal number</span>",
+                        min:"<span class='text-danger'>Minimum price cannot be below 0</span>"
+                    },
+                    to:{
+                        number:"<span class='text-danger'>Price should be a valid decimal number</span>",
+                        min:"<span class='text-danger'>Maximum price cannot be less than minimum price or below 0</span>",
+                        compare:"<span class='text-danger'>Maximum price cannot be less than minimum price or below 0</span>"
+                    },
+                    handletime:{
+                        digits:"<span class='text-danger'>Max handling time should be a valid digit</span>",
+                        min:"<span class='text-danger'>Max handling time should be greater than or equal to 1</span>"
+                    }
+               }
+        }); 
+          $("#submit").on('click',function(){
+            $("#search").valid();
+          });
+        });  
+        $.validator.setDefaults({
+                submitHandler: function(){
+                    initial(1);
+                }
+        });
+        function initial(pageNumber){
+            curP = 1;
+            totalP=999999;
+            Search_Ebay(pageNumber);
+        }
+        function Search_Ebay(pageNumber){
+            $("#show").empty();
+            $("#pag").empty();
+            var conType = new Array();
+            var buyType = new Array();
+            $.each($("input[name='con[]']:checked"),function(){
+                conType.push($(this).val());
+            });
+            $.each($("input[name='buy[]']:checked"),function(){
+                buyType.push($(this).val());
+            });
+
+            var sell = $("#sell:checked").val();
+            var ship1 = $("#ship1:checked").val();
+            var ship2 = $("#ship2:checked").val();
+           
+            
+            $.ajax({
+                type:"GET",
+                url:"http://kanzhouhw8-env.elasticbeanstalk.com",
+                dataType:"json",
+                data:{keyword:$('#keyword').val(),
+                        sort:$('#sort').val(),
+                        page:$('#page').val(),
+                        from:$('#from').val(),
+                        to:$('#to').val(),
+                        ship1:ship1,
+                        ship2:ship2,
+                        sell:sell,
+                        con:conType,
+                        buy:buyType, 
+                        pageNumber:pageNumber,
+                        handltime:$('#handltime').val()
+                        },
+                success: function(data){
+                    var res = data;
+
+                    var start = (parseInt(res.pageNumber-1))*parseInt(res.itemCount)+1;
+                    var end =(parseInt(res.pageNumber))*parseInt(res.itemCount);
+                    var base = parseInt(res.itemCount)*5;
+                    totalP = Math.floor((parseInt(res.resultCount)/base))+1;
+
+                    if(end > parseInt(res.resultCount))
+                        end = parseInt(res.resultCount);
+                      if(res.ack == "Success"){
+                          $("#show").append("<div id='totalID'><h3>"+start+"-"+end+" Results in total "+res.resultCount+"</h3></div>");
+                          $("#show").append("<ul class='media-list' id ='items'></ul>");
+                             //alert("aa");
+                          var count=res.itemCount;
+                          if(pageNumber*res.itemCount>res.resultCount){
+                            count = res.resultCount-(pageNumber-1)*res.itemCount;
+                          }
+                          for(var i =0;i < count; i++){
+                              var location = (res['item'+i].basicInfo.location=="")?"N/A":res['item'+i].basicInfo.location;
+                              var categoryName=(res['item'+i].basicInfo.categoryName=="")?"N/A":res['item'+i].basicInfo.categoryName;
+                              var conditionDisplayName=(res['item'+i].basicInfo.conditionDisplayName=="")?"N/A":res['item'+i].basicInfo.conditionDisplayName;
+                              var listingType=(res['item'+i].basicInfo.listingType=="")?"N/A":res['item'+i].basicInfo.listingType;
+                              var sellerUserName=(res['item'+i].sellerInfo.sellerUserName=="")?"N/A":res['item'+i].sellerInfo.sellerUserName;
+                              var feedbackScore=(res['item'+i].sellerInfo.feedbackScore=="")?"N/A":res['item'+i].sellerInfo.feedbackScore;
+                              var positiveFeedbackPercent=(res['item'+i].sellerInfo.positiveFeedbackPercent=="")?"N/A":res['item'+i].sellerInfo.positiveFeedbackPercent;
+                              var feedbackRatingStar=(res['item'+i].sellerInfo.feedbackRatingStar=="")?"N/A":res['item'+i].sellerInfo.feedbackRatingStar;
+                              var sellerStoreName=(res['item'+i].sellerInfo.sellerStoreName=="")?"N/A":res['item'+i].sellerInfo.sellerStoreName;
+                              var shippingType=(res['item'+i].shippingInfo.shippingType=="")?"N/A":res['item'+i].shippingInfo.shippingType;
+
+                              var handlingTime=(res['item'+i].shippingInfo.handlingTime=="")?"N/A":res['item'+i].shippingInfo.handlingTime;
+                               var shipToLocations=(res['item'+i].shippingInfo.shipToLocations=="")?"N/A":res['item'+i].shippingInfo.shipToLocations;
+                               var pictureURLSuperSize =(res['item'+i].basicInfo.pictureURLSuperSize=="")?res['item'+i].basicInfo.galleryURL:res['item'+i].basicInfo.pictureURLSuperSize;
+                               var topRatedSeller="";
+                               if(res['item'+i].sellerInfo.topRatedSeller!="true"){
+                                    topRatedSeller = '<span class="glyphicon glyphicon-remove text-danger" aria-hidden="true"></span>';
+                               }
+                               else
+                                  topRatedSeller = '<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>';
+                              var expeditedShipping="";
+                              if(res['item'+i].shippingInfo.expeditedShipping !="true")
+                                    expeditedShipping='<span class="glyphicon glyphicon-remove text-danger" aria-hidden="true"></span>';
+                             else 
+                                expeditedShipping='<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>';
+                            var oneDayShippingAvailable="";
+                              if(res['item'+i].shippingInfo.oneDayShippingAvailable !="true")
+                                    oneDayShippingAvailable='<span class="glyphicon glyphicon-remove text-danger" aria-hidden="true"></span>';
+                             else 
+                                oneDayShippingAvailable='<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>';
+                            var returnsAccepted="";
+                              if(res['item'+i].shippingInfo.returnsAccepted !="true")
+                                    returnsAccepted='<span class="glyphicon glyphicon-remove text-danger" aria-hidden="true"></span>';
+                             else 
+                                returnsAccepted='<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>';
+
+
+                              var item ='<li class="media"><div class="media-left col-sm-1"><img class="pull-left" width="70px" height="70px" alt= "N/A" src="'+res['item'+i].basicInfo.galleryURL+'" data-toggle="modal" data-target="#picture'+i+'"><div class ="modal fade " id="picture'+i+'"tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"><div class="modal-dialog "><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">';
+                                item+=res['item'+i].basicInfo.title+'</h4></div><div class="modal-body">';
+                                var des ='<p><b>Price: $'+res['item'+i].basicInfo.convertedCurrentPrice+'</b>';
+                                if(parseFloat(res['item'+i].basicInfo.shippingServiceCost)==0||res['item'+i].shippingInfo.shippingType=='Free'||res['item'+i].basicInfo.shippingServiceCost=='')
+                                    des+=' (Free Shipping)';
+                                else{
+                                    des +=' (Shipping cost:'+res['item'+i].basicInfo.shippingServiceCost+')';
+                                }
+                                des+='<i>&nbsp;&nbsp;&nbsp;&nbsp;Location: '+location+'</i>';
+                                var title = '<a target="_blank" href="'+res['item'+i].basicInfo.viewItemURL+'"><h4 class="media-heading text-primary">'+res['item'+i].basicInfo.title+'</h4></a>';
+                                item+='<img class= "img-responsive center-block" src="'+pictureURLSuperSize+'"/></div></div></div></div></div></div><div class="media-body col-sm-11"> '+title+des;
+                                if(res['item'+i].basicInfo.topRatedListing == "true"){
+                                    item +='<img src="http://cs-server.usc.edu:45678/hw/hw8/itemTopRated.jpg" width="40px" height="40px" />';
+                                }
+                                     //add view details tablist
+                                     item+='<a data-toggle="collapse" href="#detail'+i+'" aria-expanded="false" aria-controls="detail'+i+'"><span class="text-primary">&nbsp;View Details&nbsp;&nbsp;</span></a>';
+                                     item+='<img src="http://cs-server.usc.edu:45678/hw/hw8/fb.png" width="18px" height="18px" onclick="FB.ui({method:\'feed\',href:\'https://developers.facebook.com/docs/\',name:\''+res['item'+i].basicInfo.title+'\',description:\'Price: $'+res['item'+i].basicInfo.convertedCurrentPrice+'(Free Shipping)&nbsp;&nbsp;&nbsp;&nbsp;Location:'+location+'\',picture:\''+res['item'+i].basicInfo.galleryURL+'\',},function(response) {if (response && !response.error_code) {alert(\'Posted Successfully.\');} else {alert(\'Not Posted.\');}});"/></p><div class="collapse" id="detail'+i+'"><div role="tabpanel"><ul class="nav nav-tabs" role="tablist"><li role="presentation" class="active"><a href="#basic_info'+i+'" aria-controls="basic_info'+i+'" role="tab" data-toggle="tab">Basic Info</a></li><li role="presentation"><a href="#seller_info'+i+'" aria-controls="seller_info'+i+'" role="tab" data-toggle="tab">Seller Info</a></li><li role="presentation"><a href="#shipping_info'+i+'" aria-controls="shipping_info'+i+'" role="tab" data-toggle="tab">Shipping Info</a></li></ul>';
+                                    //add  content of the basicInfo 
+                                     item+='<div class="tab-content"><div role="tabpanel" class="tab-pane active" id="basic_info'+i+'"><div class="row"><div class="col-sm-2"><b>Category name</b></div><div class="col-sm-10">'+categoryName+'</div></div><div class="row"><div class="col-sm-2"><b>Condition</b></div><div class="col-sm-10">'+conditionDisplayName+'</div></div><div class="row"><div class="col-sm-2"><b>Buying format</b></div><div class="col-sm-10">'+listingType+'</div></div></div>';
+                                     //add content of sellerinfo
+                                     item+='<div role="tabpanel" class="tab-pane" id="seller_info'+i+'"><div class="row"><div class="col-sm-2"><b>User name</b></div><div class="col-sm-10">'+sellerUserName+'</div></div><div class="row"><div class="col-sm-2"><b>Feedback score</b></div><div class="col-sm-10">'+feedbackScore+'</div></div><div class="row"><div class="col-sm-2"><b>Positive feedback</b></div><div class="col-sm-10">'+positiveFeedbackPercent+'%</div></div><div class="row"><div class="col-sm-2"><b>Feedback rating</b></div><div class="col-sm-10">'+feedbackRatingStar+'</div></div><div class="row"><div class="col-sm-2"><b>Top rated</b></div><div class="col-sm-10">'+topRatedSeller+'</div></div><div class="row"><div class="col-sm-2"><b>Store</b></div><div class="col-sm-10">';
+                                     if(sellerStoreName == "N/A")
+                                        item+=sellerStoreName;
+                                    else
+                                        item+='<a class="text-primary" target="_blank" href="'+res['item'+i].sellerInfo.sellerStoreURL+'">'+sellerStoreName+'</a>';
+                                     item+='</div></div></div>';
+                                     //add shipping content
+                                     item+='<div role="tabpanel" class="tab-pane" id="shipping_info'+i+'"><div class="row"><div class="col-sm-2"><b>Shipping type</b></div><div class="col-sm-10">'+shippingType+'</div></div><div class="row"><div class="col-sm-2"><b>Handling time</b></div><div class="col-sm-10">'+handlingTime+' day(s)</div></div><div class="row"><div class="col-sm-2"><b>Shipping locations</b></div><div class="col-sm-10">'+shipToLocations+'</div></div><div class="row"><div class="col-sm-2"><b>Expedited shipping</b></div><div class="col-sm-10">'+expeditedShipping+'</div></div><div class="row"><div class="col-sm-2"><b>One day shipping</b></div><div class="col-sm-10">'+oneDayShippingAvailable+'</div></div><div class="row"><div class="col-sm-2"><b>Returns accepted</b></div><div class="col-sm-10">'+returnsAccepted+'</div></div></div></div></div></div></div></li>'; 
+                                 $("#items").append(item);
+                            }
+                      //  if(pageNumber ==9)
+                        //    alert("aa");
+                      $("#pag").empty();      
+                     $("#pag").append('<li id ="pre"><span aria-hidden="true">&laquo;</span></li>');
+                     var col=5;
+                    // alert(totalP);
+                     //alert(curP);
+                     if(curP == totalP){
+                        var left = res.resultCount-base*(curP-1);
+                        if(left % res.itemCount==0)
+                            col = Math.floor(left/res.itemCount);
+                        else
+                            col = Math.floor(left/res.itemCount+1);
+                       // alert(col)
+                    }
+                     var num = (curP-1)*5;
+                     for(var j= 1; j<=col;j++){
+                        var t= num+j;
+                        var id = "_"+j;
+                        $("#pag").append('<li id ="page'+id+'"><span>'+t+'</span></li>');
+                        
+                     }
+                     if(col>=1)
+                       $("#page_"+1).click(function(){Search_Ebay((curP-1)*5+1)});
+                    if(col>=2)
+                       $("#page_"+2).click(function(){Search_Ebay((curP-1)*5+2)});
+                    if(col>=3)
+                       $("#page_"+3).click(function(){Search_Ebay((curP-1)*5+3)});
+                    if(col>=4)
+                       $("#page_"+4).click(function(){Search_Ebay((curP-1)*5+4)});
+                    if(col>=5)
+                       $("#page_"+5).click(function(){Search_Ebay((curP-1)*5+5)});
+                      $("#pag").append('<li id ="next"><span aria-hidden="true">&raquo;</span></li>'); 
+                     if(curP==1)
+                        $("#pre").addClass("disabled");
+                     if(curP==totalP)
+                         $("#next").addClass('disabled');
+                     var acPage;
+                     if(pageNumber%5==0)
+                       acPage = 5;
+                     else 
+                       acPage = pageNumber%5;
+                     $("#page_"+acPage).addClass("active");
+                     if(curP!=totalP){
+                         $("#next").click(function(){
+                            curP+=1;
+                            Search_Ebay(5*(curP-1)+1);
+                        });
+                     }
+                     if(curP!=1){
+                        $("#pre").click(function(){
+                            curP-=1;
+                            Search_Ebay(5*(curP-1)+1);
+                        });         
+                        }
+                    }
+                    else{
+                        $("#show").html("<h3>No Results found</h3>");
+                    }
+                }
+
+            });
+        
+        }
+    </script>
+</body>
+</html>
